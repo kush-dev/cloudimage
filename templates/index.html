@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Image Upload</title>
+    
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <h1 class="text-center">Upload an Image to Google Cloud Storage</h1>
+
+
+    <div id="message" class="alert d-none"></div>
+
+
+    <form id="uploadForm" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <input class="form-control" type="file" name="file" id="fileInput">
+        </div>
+        <button class="btn btn-primary w-100" type="submit">Upload</button>
+    </form>
+</div>
+
+<div class="container">
+    <h2 class="text-center mt-4">Uploaded Images</h2>
+    <div class="image-grid">
+        {% for image in images %}
+            <div class="image-box">
+                <img src="{{ url_for('static', filename='uploads/' + image) }}" class="img-thumbnail">
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+<script>
+    document.getElementById("uploadForm").onsubmit = function(event) {
+        event.preventDefault();
+        let fileInput = document.getElementById("fileInput");
+        if (fileInput.files.length === 0) {
+            showMessage("Please select an image!", "alert-danger");
+        } else {
+            this.submit();
+            showMessage("Image Upload successful!", "alert-success");
+        }
+    };
+
+    function showMessage(text, alertClass) {
+        let messageBox = document.getElementById("message");
+        messageBox.textContent = text;
+        messageBox.className = "alert " + alertClass;
+        messageBox.classList.remove("d-none");
+
+        setTimeout(() => {
+            messageBox.classList.add("d-none");
+        }, 3000);
+    }
+</script>
+
+</body>
+</html>
